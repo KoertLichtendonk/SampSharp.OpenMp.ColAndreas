@@ -3,21 +3,34 @@
     <PropertyGroup>
         <TargetFramework>net10.0</TargetFramework>
         <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <RootNamespace>SampSharp.ColAndreas.Entities</RootNamespace>
         <AssemblyName>SampSharp.OpenMp.ColAndreas</AssemblyName>
     </PropertyGroup>
 
-    <!--
-        Depends on SampSharp which lives as a sibling submodule.
-        When this repo is consumed standalone (без VSRP), переопредели пути через
-        Directory.Build.props или консьюмер-проекту надо самому добавить нужные
-        ProjectReference'ы.
-    -->
+    <PropertyGroup Label="Package">
+        <PackageId>SampSharp.OpenMp.ColAndreas</PackageId>
+        <Title>ColAndreas for SampSharp 1.x (open.mp x64)</Title>
+        <Description>C# bindings for the ColAndreas open.mp component, for SampSharp 1.x on open.mp x64. Fork of VS-RP's SampSharp.OpenMp.ColAndreas.</Description>
+        <Authors>VS-RP, Koert Lichtendonk</Authors>
+        <Company>VS-RP, Koert Lichtendonk</Company>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageTags>SampSharp open.mp ColAndreas</PackageTags>
+        <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/KoertLichtendonk/SampSharp.OpenMp.ColAndreas</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/KoertLichtendonk/SampSharp.OpenMp.ColAndreas</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+    </PropertyGroup>
+
     <ItemGroup>
-        <ProjectReference Include="..\..\SampSharp\src\SampSharp.OpenMp.Core\SampSharp.OpenMp.Core.csproj" />
-        <ProjectReference Include="..\..\SampSharp\src\SampSharp.OpenMp.Entities\SampSharp.OpenMp.Entities.csproj" />
+        <None Include="README.md" Pack="True" PackagePath="\" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="SampSharp.OpenMp.Core" Version="1.0.0-prerelease2" />
+        <PackageReference Include="SampSharp.OpenMp.Entities" Version="1.0.0-prerelease2" />
     </ItemGroup>
 
 </Project>

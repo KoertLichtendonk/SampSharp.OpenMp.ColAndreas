@@ -59,6 +59,15 @@ internal sealed class ColAndreasService : IColAndreasService
         return true;
     }
 
+    public unsafe int RayCastLineModel(Vector3 start, Vector3 end, out Vector3 hit)
+    {
+        float hx, hy, hz;
+        var model = ColAndreasInterop.RayCastLine(
+            start.X, start.Y, start.Z, end.X, end.Y, end.Z, &hx, &hy, &hz);
+        hit = model == 0 ? default : new Vector3(hx, hy, hz);
+        return model;
+    }
+
     public unsafe bool RayCastLineId(Vector3 start, Vector3 end, out Vector3 hit, out int colId)
     {
         float hx, hy, hz;

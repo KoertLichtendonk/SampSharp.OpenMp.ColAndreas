@@ -10,6 +10,26 @@ Unlike the sibling bridges in this family, this repository is **managed only**. 
 native shim to build: the bindings P/Invoke the `CASharp_*` exports of `colandreas.dll`
 directly.
 
+## About this fork
+
+This is a fork of [VS-RP/SampSharp.OpenMp.ColAndreas](https://github.com/VS-RP/SampSharp.OpenMp.ColAndreas). It adds:
+
+| | VS-RP's repository | This fork |
+|---|---|---|
+| Install | Build from source, with SampSharp checked out next to it | The NuGet package `SampSharp.OpenMp.ColAndreas` |
+| SampSharp | Referenced as projects from that checkout | The `SampSharp.OpenMp.Core` and `SampSharp.OpenMp.Entities` NuGet packages |
+| Model id of a ray hit | Not returned (`RayCastLine` returns only `bool`) | `RayCastLineModel`, which returns the model id, 0 on a miss. For example, water is model 20000 |
+
+Namespaces and method names are unchanged, so code written for VS-RP's version works as is.
+
+## Install
+
+```bash
+dotnet add package SampSharp.OpenMp.ColAndreas --prerelease
+```
+
+The package depends on SampSharp 1.0 prereleases, so its versions are previews too.
+
 ## Architecture
 
 ```
@@ -45,8 +65,9 @@ services.AddColAndreas();
 
 ## Surface
 
-- **Ray casts** — `RayCastLine` and variants returning the hit point, the collision model
-  id, the surface normal, the reflection vector, or the hit object's rotation
+- **Ray casts** — `RayCastLine` and variants returning the hit point, the hit model id
+  (`RayCastLineModel`), the collision model id, the surface normal, the reflection vector,
+  or the hit object's rotation
 - **Ground height** — `FindZ_For2DCoord` / `FindZ_For3DCoord`, casting from `+700` down to
   `-1000` by default: high enough to clear the LV and SF airports, low enough to catch
   underwater terrain
@@ -68,11 +89,19 @@ rename pass.
 dotnet build SampSharp.OpenMp.ColAndreas.csproj
 ```
 
-Needs the SampSharp repository checked out alongside this one; the csproj references
-`SampSharp.OpenMp.Core` and `SampSharp.OpenMp.Entities` by relative path.
+SampSharp comes from NuGet, so no other repository needs to be checked out.
 
-CI builds on Linux, macOS and Windows and publishes the assembly plus its XML docs as a
-build artifact; tagged pushes cut a GitHub release.
+## Releases
+
+`.github/workflows/release.yml` publishes the NuGet package `SampSharp.OpenMp.ColAndreas`
+to nuget.org, with NuGet trusted publishing:
+
+| When | Version |
+|---|---|
+| Every push to `main` | `1.0.0-preview.<year>.<week>.<n>` |
+| Every tag | The tag's version |
+
+`colandreas.dll` itself isn't part of this repository; it comes from the ColAndreas open.mp build.
 
 ## License
 
