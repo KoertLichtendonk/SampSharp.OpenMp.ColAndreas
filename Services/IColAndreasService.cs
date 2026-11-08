@@ -38,7 +38,7 @@ public interface IColAndreasService
     /// <summary>Single-hit ray cast. Returns false on miss.</summary>
     bool RayCastLine(Vector3 start, Vector3 end, out Vector3 hit);
 
-    /// <summary>Single-hit ray cast that returns the hit model id (0 on miss), like the legacy CA_RayCastLine. Water is model 20000.</summary>
+    /// <summary>Single-hit ray cast that returns the hit model id (0 on miss), like the legacy CA_RayCastLine. Water is <see cref="ColAndreasConstants.WaterObject"/>.</summary>
     int RayCastLineModel(Vector3 start, Vector3 end, out Vector3 hit);
 
     /// <summary>Single-hit ray cast that also returns the hit col-object index (col-id).</summary>

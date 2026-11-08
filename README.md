@@ -3,7 +3,7 @@
 Managed C# bindings for [ColAndreas](https://github.com/Pottus/ColAndreas) on open.mp x64,
 for gamemodes running on the SampSharp open.mp host. ColAndreas keeps a Bullet-physics copy
 of the GTA: San Andreas static collision world server-side, so the server can answer
-questions the game engine normally only answers on the client — what is under this point,
+questions the game engine normally only answers on the client: what is under this point,
 what does this ray hit, where is the ground here.
 
 Unlike the sibling bridges in this family, this repository is **managed only**. There is no
@@ -18,7 +18,8 @@ This is a fork of [VS-RP/SampSharp.OpenMp.ColAndreas](https://github.com/VS-RP/S
 |---|---|---|
 | Install | Build from source, with SampSharp checked out next to it | The NuGet package `SampSharp.OpenMp.ColAndreas` |
 | SampSharp | Referenced as projects from that checkout | The `SampSharp.OpenMp.Core` and `SampSharp.OpenMp.Entities` NuGet packages |
-| Model id of a ray hit | Not returned (`RayCastLine` returns only `bool`) | `RayCastLineModel`, which returns the model id, 0 on a miss. For example, water is model 20000 |
+| Model id of a ray hit | Not returned (`RayCastLine` returns only `bool`) | `RayCastLineModel`, which returns the model id, 0 on a miss. For example, water is `ColAndreasConstants.WaterObject` (20000) |
+| Pawn include helpers | None | `IsPlayerFacingWater` and `WaterObject`, ported from `colandreas.inc` |
 
 Namespaces and method names are unchanged, so code written for VS-RP's version works as is.
 
@@ -54,7 +55,7 @@ The package depends on SampSharp 1.0 prereleases, so its versions are previews t
 | `ColAndreas.cadb`    | Collision database, ships with the plugin |
 
 `IsDataLoaded` reports whether the `.cadb` was found and parsed; `IsInitialized` reports
-whether `Init()` has built the dynamics world. Call `Init()` once at startup — everything
+whether `Init()` has built the dynamics world. Call `Init()` once at startup. Everything
 else returns garbage until you do.
 
 ## Wiring
@@ -65,19 +66,21 @@ services.AddColAndreas();
 
 ## Surface
 
-- **Ray casts** — `RayCastLine` and variants returning the hit point, the hit model id
+- **Ray casts:** `RayCastLine` and variants returning the hit point, the hit model id
   (`RayCastLineModel`), the collision model id, the surface normal, the reflection vector,
   or the hit object's rotation
-- **Ground height** — `FindZ_For2DCoord` / `FindZ_For3DCoord`, casting from `+700` down to
+- **Water:** `ColAndreasConstants.WaterObject`, the model id a ray reports on water, and
+  `colAndreas.IsPlayerFacingWater(player)`, a port of the include's `CA_IsPlayerFacingWater`
+- **Ground height:** `FindZ_For2DCoord` / `FindZ_For3DCoord`, casting from `+700` down to
   `-1000` by default: high enough to clear the LV and SF airports, low enough to catch
   underwater terrain
-- **Collision objects** — create, destroy, move, rotate and tag user objects in the
+- **Collision objects:** create, destroy, move, rotate and tag user objects in the
   physics world, independent of the visible objects players see
-- **Building removal** — `RemoveBuilding` / `RestoreBuilding`, to keep the collision world
+- **Building removal:** `RemoveBuilding` / `RestoreBuilding`, to keep the collision world
   in step with `RemoveBuildingForPlayer` on the client
-- **Model geometry** — bounding sphere and bounding box per model id, plus
+- **Model geometry:** bounding sphere and bounding box per model id, plus
   `ContactTest` for "would this model at this position intersect anything"
-- **Math helpers** — `EulerToQuat` / `QuatToEuler`
+- **Math helpers:** `EulerToQuat` / `QuatToEuler`
 
 Method names deliberately follow the legacy x86 `SampSharp.ColAndreas` binding, including
 the unidiomatic `FindZ_For2DCoord`, so gamemode code can move to open.mp x64 without a
@@ -105,7 +108,7 @@ to nuget.org, with NuGet trusted publishing:
 
 ## License
 
-Apache-2.0 -- see [LICENSE](LICENSE). That covers the bindings in this
+Apache-2.0, see [LICENSE](LICENSE). That covers the bindings in this
 repository; ColAndreas itself is licensed separately by its authors.
 
 ---
